@@ -1,25 +1,36 @@
 package io.nats.client.impl;
 
-import io.nats.client.support.ByteArrayBuilder;
-
 public class NatsJsBenchmarkMessage extends NatsMessage {
 
     public static final String HDR_PUB_TIME = "pt";
 
     public NatsJsBenchmarkMessage(String subject, byte[] data) {
-        super(subject, null, data);
-        headers = new Headers();
-        update();
+        //noinspection ConstantConditions
+        super(subject, null, new Headers(), data);
     }
 
-    private void update() {
+    @Override
+    protected boolean calculateIfDirty() {
         headers.put(HDR_PUB_TIME, "" + System.currentTimeMillis());
-        protocolBabDirty = true;
+        dirty = true;
+        return super.calculateIfDirty();
+    }
+
+/*
+------------------------------------------------------------
+THIS CODE IS FOR AN UNRELEASED VERSION OF THE JAVA CLIENT
+------------------------------------------------------------
+    public NatsJsBenchmarkMessage(String subject, byte[] data) {
+        //noinspection ConstantConditions
+        super(subject, null, new Headers(), data);
+        headers.put(HDR_PUB_TIME, "" + System.currentTimeMillis());
     }
 
     @Override
     ByteArrayBuilder getProtocol() {
-        update();
+        headers.put(HDR_PUB_TIME, "" + System.currentTimeMillis());
         return super.getProtocol();
     }
+------------------------------------------------------------
+*/
 }
