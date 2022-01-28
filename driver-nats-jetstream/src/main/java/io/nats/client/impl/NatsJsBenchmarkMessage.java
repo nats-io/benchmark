@@ -10,32 +10,11 @@ public class NatsJsBenchmarkMessage extends NatsMessage {
         headers.put(HDR_PUB_TIME, "" + System.currentTimeMillis());
     }
 
-    @Override
-    byte[] getProtocolBytes() {
-        System.out.println("-p-p-p- " + subject + " " + headers);
-        headers.put(HDR_PUB_TIME, "" + System.currentTimeMillis());
-        dirty = true;
-        return super.getProtocolBytes();
-    }
-
-    @Override
-    protected boolean calculateIfDirty() {
-        System.out.println("!x!x!x! " + subject + " " + headers);
-        headers.put(HDR_PUB_TIME, "" + System.currentTimeMillis());
-        dirty = true;
-        return super.calculateIfDirty();
-    }
-
 /*
 ------------------------------------------------------------
 THIS CODE IS FOR AN UNRELEASED VERSION OF THE JAVA CLIENT
+IT GETS THE TIMESTAMP AS CLOSE TO THE PUBLISH TIME AS POSSIBLE
 ------------------------------------------------------------
-    public NatsJsBenchmarkMessage(String subject, byte[] data) {
-        //noinspection ConstantConditions
-        super(subject, null, new Headers(), data);
-        headers.put(HDR_PUB_TIME, "" + System.currentTimeMillis());
-    }
-
     @Override
     ByteArrayBuilder getProtocol() {
         headers.put(HDR_PUB_TIME, "" + System.currentTimeMillis());

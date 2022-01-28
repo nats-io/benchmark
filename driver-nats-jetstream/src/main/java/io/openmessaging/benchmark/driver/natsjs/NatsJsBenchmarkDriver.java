@@ -21,10 +21,7 @@ package io.openmessaging.benchmark.driver.natsjs;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import io.nats.client.Connection;
-import io.nats.client.JetStreamManagement;
-import io.nats.client.Nats;
-import io.nats.client.Options;
+import io.nats.client.*;
 import io.nats.client.api.StorageType;
 import io.nats.client.api.StreamConfiguration;
 import io.nats.client.impl.ErrorListenerLoggerImpl;
@@ -167,7 +164,14 @@ public class NatsJsBenchmarkDriver implements BenchmarkDriver {
         Options.Builder builder = new Options.Builder();
         builder.server(config.natsHostUrl);
         builder.maxReconnects(5);
-        builder.errorListener(new ErrorListenerLoggerImpl());
+
+        ErrorListener el = new ErrorListenerLoggerImpl() {
+            @Override
+            public void flowControlProcessed(Connection conn, JetStreamSubscription sub, String id, FlowControlSource source) {
+                // Do nothing. There will be a lot of these on big data sets
+            }
+        };
+        builder.errorListener(el);
 
         // TODO Todd what is this for?
 //        for(int i=0; i < config.workers.length; i++) {

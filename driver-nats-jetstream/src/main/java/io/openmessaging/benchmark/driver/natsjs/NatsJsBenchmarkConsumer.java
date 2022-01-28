@@ -78,6 +78,7 @@ public class NatsJsBenchmarkConsumer implements BenchmarkConsumer, MessageHandle
         received = new AtomicInteger();
         js = conn.jetStream();
 
+        // TODO Tune consumer
         ackInterval = config.jsConsumerAckInterval == 0 ? 0 : (config.jsConsumerAckInterval < 1 ? 100 : config.jsConsumerAckInterval);
 
         ackPolicy = ackInterval == 1 ? AckPolicy.Explicit : (ackInterval == 0 ? AckPolicy.None : AckPolicy.All);
