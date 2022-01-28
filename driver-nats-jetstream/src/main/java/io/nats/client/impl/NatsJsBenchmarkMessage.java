@@ -7,10 +7,20 @@ public class NatsJsBenchmarkMessage extends NatsMessage {
     public NatsJsBenchmarkMessage(String subject, byte[] data) {
         //noinspection ConstantConditions
         super(subject, null, new Headers(), data);
+        headers.put(HDR_PUB_TIME, "" + System.currentTimeMillis());
+    }
+
+    @Override
+    byte[] getProtocolBytes() {
+        System.out.println("-p-p-p- " + subject + " " + headers);
+        headers.put(HDR_PUB_TIME, "" + System.currentTimeMillis());
+        dirty = true;
+        return super.getProtocolBytes();
     }
 
     @Override
     protected boolean calculateIfDirty() {
+        System.out.println("!x!x!x! " + subject + " " + headers);
         headers.put(HDR_PUB_TIME, "" + System.currentTimeMillis());
         dirty = true;
         return super.calculateIfDirty();
