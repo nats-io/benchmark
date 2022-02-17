@@ -16,11 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.openmessaging.benchmark.driver.natsJetStream;
+package io.openmessaging.benchmark.dev.natsjs;
 
-public class NatsConfig {
-    public String[] workers;
-    public String natsHostUrl;
-    public String jsConsumerMode;
-    public int jsReplicas;
+import java.util.Date;
+
+public class Result {
+
+    final long publishTimestamp;
+    final long receivedTimestamp;
+
+    public Result(long publishTimestamp, long receivedTimestamp) {
+        this.publishTimestamp = publishTimestamp;
+        this.receivedTimestamp = receivedTimestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "pub:" + new Date(publishTimestamp) + " | rcvd: " + new Date(receivedTimestamp);
+    }
+
+    public long elapsed() {
+        return receivedTimestamp - publishTimestamp;
+    }
 }
