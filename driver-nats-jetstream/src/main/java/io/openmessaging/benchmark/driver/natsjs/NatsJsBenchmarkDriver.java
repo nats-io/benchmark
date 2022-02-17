@@ -24,7 +24,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.nats.client.*;
 import io.nats.client.api.StorageType;
 import io.nats.client.api.StreamConfiguration;
-import io.nats.client.impl.ErrorListenerLoggerImpl;
 import io.openmessaging.benchmark.driver.BenchmarkConsumer;
 import io.openmessaging.benchmark.driver.BenchmarkDriver;
 import io.openmessaging.benchmark.driver.BenchmarkProducer;
@@ -165,13 +164,7 @@ public class NatsJsBenchmarkDriver implements BenchmarkDriver {
         builder.server(config.natsHostUrl);
         builder.maxReconnects(5);
 
-        ErrorListener el = new ErrorListenerLoggerImpl() {
-            @Override
-            public void flowControlProcessed(Connection conn, JetStreamSubscription sub, String id, FlowControlSource source) {
-                // Do nothing. There will be a lot of these on big data sets
-            }
-        };
-        builder.errorListener(el);
+        builder.errorListener(new ErrorListener() {});
 
         // TODO Todd what is this for?
 //        for(int i=0; i < config.workers.length; i++) {
